@@ -99,11 +99,11 @@ export default function App() {
         )}
       </AnimatePresence>
       {/* Navigation */}
-      <nav className={`fixed top-0 w-full z-50 border-b border-app-border bg-app-bg/80 backdrop-blur-xl transition-all duration-500`}>
+      <nav className={`fixed top-0 w-full z-50 border-b ${view === 'hub' ? 'border-white/10 bg-brand-deep/80' : 'border-app-border bg-app-bg/80'} backdrop-blur-xl transition-all duration-500`}>
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-1 font-black tracking-tighter text-2xl">
-              <span className="text-white">RENT-</span>
+              <span className={view === 'hub' ? 'text-white' : 'text-app-text'}>RENT-</span>
               <span className="text-app-accent">RUBY</span>
             </div>
           </div>
@@ -111,10 +111,10 @@ export default function App() {
           <div className="hidden md:flex items-center gap-8 text-sm font-medium">
             {view === 'hub' ? (
               <>
-                <a href="#about" className="text-app-text/60 hover:text-app-text transition-colors">About</a>
-                <a href="#amenities" className="text-app-text/60 hover:text-app-text transition-colors">Amenities</a>
-                <a href="#neighborhood" className="text-app-text/60 hover:text-app-text transition-colors">Neighborhood</a>
-                <a href="#gallery" className="text-app-text/60 hover:text-app-text transition-colors">Gallery</a>
+                <a href="#about" className="text-white/60 hover:text-white transition-colors">About</a>
+                <a href="#amenities" className="text-white/60 hover:text-white transition-colors">Amenities</a>
+                <a href="#neighborhood" className="text-white/60 hover:text-white transition-colors">Neighborhood</a>
+                <a href="#gallery" className="text-white/60 hover:text-white transition-colors">Gallery</a>
               </>
             ) : (
               <>
@@ -215,9 +215,9 @@ export default function App() {
             className="pt-20"
           >
             {/* Hero Section */}
-            <section className="relative h-[90vh] flex items-center overflow-hidden bg-[#0B1A2D]">
+            <section className="relative h-[90vh] flex items-center overflow-hidden bg-brand-deep">
               {/* Grass-like organic background hint */}
-              <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_bottom,_#061a12_0%,_transparent_70%)] opacity-40"></div>
+              <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_bottom,_var(--color-brand-glow)_0%,_transparent_70%)] opacity-50"></div>
               
               <div className="absolute inset-0 z-0 opacity-20">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-app-accent/20 via-transparent to-transparent"></div>
@@ -245,7 +245,7 @@ export default function App() {
                       The Ultimate <span className="text-app-accent">Oakland</span> Lifestyle.
                     </div>
                     <div className="mt-8 flex items-center gap-2">
-                      <span className="text-xl font-sans font-bold text-blue-400 uppercase tracking-tight">POSITIVE VIBES LIVE HERE</span>
+                      <span className="text-xl font-sans font-bold text-app-highlight uppercase tracking-tight">POSITIVE VIBES LIVE HERE</span>
                       <span className="text-xl font-sans font-bold text-white/40 uppercase tracking-tight">STORY.</span>
                     </div>
                     <div className="mt-12 flex flex-col sm:flex-row gap-6">
@@ -272,7 +272,7 @@ export default function App() {
             </section>
 
             {/* Neighborhood Landmarks Section */}
-            <section id="neighborhood" className="py-24 bg-[#0B1A2D] relative overflow-hidden">
+            <section id="neighborhood" className="py-24 bg-brand-deep relative overflow-hidden">
               <div className="max-w-7xl mx-auto px-6">
                 <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
                   <div>
@@ -425,7 +425,7 @@ export default function App() {
             <BuildingIntelligence />
 
             {/* Platform Ecosystem Presentation */}
-            <section id="platform-ecosystem" className="py-32 bg-[#0B1A2D] text-white">
+            <section id="platform-ecosystem" className="py-32 bg-brand-deep text-white">
               <div className="max-w-7xl mx-auto px-6">
                 <div className="text-center mb-24">
                   <div className="text-xs font-bold text-app-accent uppercase tracking-[0.4em] mb-4">The Ecosystem</div>
@@ -476,15 +476,15 @@ export default function App() {
                     initial={{ opacity: 0, x: 50 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
-                    className="p-12 rounded-[4rem] bg-white/5 border border-white/10 hover:border-[#FD5A1E]/30 transition-all group"
+                    className="p-12 rounded-[4rem] bg-white/5 border border-white/10 hover:border-app-accent/30 transition-all group"
                   >
                     <div className="flex items-center gap-4 mb-8">
-                      <div className="w-16 h-16 rounded-3xl bg-[#FD5A1E] flex items-center justify-center shadow-2xl">
+                      <div className="w-16 h-16 rounded-3xl bg-app-accent flex items-center justify-center shadow-2xl">
                         <Users className="w-8 h-8 text-white" />
                       </div>
                       <div>
                         <h3 className="text-3xl font-black uppercase tracking-tighter">Tenant Experience</h3>
-                        <p className="text-[#FD5A1E] text-[10px] font-bold uppercase tracking-widest">Community & Lifestyle</p>
+                        <p className="text-app-accent text-[10px] font-bold uppercase tracking-widest">Community & Lifestyle</p>
                       </div>
                     </div>
                     <div className="space-y-6">
