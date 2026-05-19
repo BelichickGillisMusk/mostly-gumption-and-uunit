@@ -3,7 +3,7 @@
 This document tracks persistent enhancements and project-specific rules for the Rent-Ruby application.
 
 ## Core Aesthetic: Giants-Inspired Modern
-- **Color Palette**: Vibrant Orange (`#FF5F1F` / `app-accent`), Black/Deep Navy (`#0B1A2D`), and White.
+- **Color Palette**: Ruby (`#9B2D42` / `app-accent`), warm wine charcoal (`#1C1416` / `brand-deep`), parchment (`#F7F3EF`), sage highlight (`#5C7A6B`).
 - **Typography**: 
   - Headings: Bold, tight-tracking sans-serif (Inter/font-sans).
   - Accents: Elegant serif italics for subheadings and distances.
