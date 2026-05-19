@@ -280,7 +280,7 @@ export const AdminLegalLog: React.FC = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsCameraModalOpen(false)}
-              className="absolute inset-0 bg-[#050505]/80 backdrop-blur-sm"
+              className="absolute inset-0 bg-[#141414]/80 backdrop-blur-sm"
             />
             <motion.div 
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -966,7 +966,7 @@ export const AdminLegalLog: React.FC = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsCameraModalOpen(false)}
-              className="absolute inset-0 bg-[#050505]/80 backdrop-blur-sm"
+              className="absolute inset-0 bg-[#141414]/80 backdrop-blur-sm"
             />
             <motion.div 
               initial={{ opacity: 0, scale: 0.95, y: 20 }}

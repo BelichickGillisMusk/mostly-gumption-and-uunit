@@ -26,7 +26,7 @@ export const NeighborhoodRadiusMap = () => {
             height: `${(radius / 0.7) * 100}%` 
           }}
         >
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 px-2 py-0.5 bg-[#0B1A2D] text-[8px] font-bold text-white/20 uppercase tracking-widest">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 px-2 py-0.5 bg-[#141414] text-[8px] font-bold text-white/20 uppercase tracking-widest">
             {radius} MI
           </div>
         </motion.div>
@@ -51,7 +51,7 @@ export const NeighborhoodRadiusMap = () => {
         <motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
-          className="w-16 h-16 bg-app-accent rounded-full flex items-center justify-center shadow-[0_0_40px_rgba(255,95,31,0.6)] border-4 border-[#0B1A2D]"
+          className="w-16 h-16 bg-app-accent rounded-full flex items-center justify-center shadow-[0_0_40px_rgba(190,52,85,0.5)] border-4 border-[#141414]"
         >
           <div className="text-[10px] font-black text-white leading-none text-center">
             RUBY<br/>HUB
@@ -83,7 +83,7 @@ export const NeighborhoodRadiusMap = () => {
               
               {/* Label */}
               <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                <div className="px-3 py-1 bg-white text-[#0B1A2D] rounded-lg text-[10px] font-bold whitespace-nowrap shadow-2xl">
+                <div className="px-3 py-1 bg-white text-[#141414] rounded-lg text-[10px] font-bold whitespace-nowrap shadow-2xl">
                   {item.name} • {item.dist}mi
                 </div>
               </div>

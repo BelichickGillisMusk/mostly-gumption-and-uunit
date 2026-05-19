@@ -83,7 +83,7 @@ export const FeatureSummarySheet: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#050505] text-white p-12 font-sans selection:bg-ruby/30">
+    <div className="min-h-screen bg-[#141414] text-white p-12 font-sans selection:bg-ruby/30">
       {/* Header */}
       <div className="max-w-6xl mx-auto mb-20 flex flex-col md:flex-row md:items-end justify-between gap-8">
         <div className="space-y-4">
