@@ -122,7 +122,7 @@ export const TenantPortal = () => {
 
   const curatedColors = [
     { name: 'Ruby Red', value: '#9B111E' },
-    { name: 'Giants Orange', value: '#FD5A1E' },
+    { name: 'Brass Accent', value: '#B08D57' },
     { name: 'SF Bay Blue', value: '#0077BE' },
     { name: 'Golden Gate Gold', value: '#FFD700' },
     { name: 'Fog Grey', value: '#808080' },
@@ -367,7 +367,7 @@ export const TenantPortal = () => {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
-            className="relative min-h-[800px] rounded-[4rem] overflow-hidden shadow-2xl bg-[#0B1A2D] group"
+            className="relative min-h-[800px] rounded-[4rem] overflow-hidden shadow-2xl bg-[#17251F] group"
           >
             {/* Background: Oracle Park / SF Bay Vibe */}
             <div className="absolute inset-0 z-0">
@@ -377,7 +377,7 @@ export const TenantPortal = () => {
                 className="w-full h-full object-cover opacity-30 grayscale brightness-[0.6]"
                 referrerPolicy="no-referrer"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0B1A2D] via-transparent to-transparent"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-[#17251F] via-transparent to-transparent"></div>
             </div>
 
             {/* Stadium Architecture Elements */}
@@ -431,7 +431,7 @@ export const TenantPortal = () => {
                           onClick={() => setSelectedMailbox(unit)}
                           style={{ 
                             backgroundColor: (privacyMode && !isCurrentUser) ? '#1A1A1A' : custom.color,
-                            borderColor: isCurrentUser ? '#A64B4B' : 'rgba(255,255,255,0.1)'
+                            borderColor: isCurrentUser ? '#5F7F67' : 'rgba(255,255,255,0.1)'
                           }}
                           className={`w-20 h-24 rounded-t-2xl rounded-b-lg border-2 flex flex-col items-center justify-center transition-all hover:scale-110 hover:shadow-[0_0_40px_rgba(166,75,75,0.4)] group relative shadow-2xl ${isCurrentUser ? 'ring-4 ring-ruby/30' : ''}`}
                         >
@@ -474,7 +474,7 @@ export const TenantPortal = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 20 }}
-                    className="absolute bottom-12 left-1/2 -translate-x-1/2 w-full max-w-2xl bg-[#0B1A2D]/95 backdrop-blur-3xl p-10 rounded-[3.5rem] shadow-2xl border border-white/10 z-50"
+                    className="absolute bottom-12 left-1/2 -translate-x-1/2 w-full max-w-2xl bg-[#17251F]/95 backdrop-blur-3xl p-10 rounded-[3.5rem] shadow-2xl border border-white/10 z-50"
                   >
                     <div className="flex items-center justify-between mb-10">
                       <div className="flex items-center gap-5">
@@ -486,7 +486,7 @@ export const TenantPortal = () => {
                         </div>
                         <div>
                           <h3 className="text-3xl font-black text-white uppercase tracking-tighter">Unit {selectedMailbox} Portal</h3>
-                          <p className="text-[10px] font-bold text-[#FD5A1E] uppercase tracking-widest">Secure Stadium Access</p>
+                          <p className="text-[10px] font-bold text-app-accent uppercase tracking-widest">Secure Stadium Access</p>
                         </div>
                       </div>
                       <button onClick={() => setSelectedMailbox(null)} className="p-3 hover:bg-white/5 rounded-full transition-colors">
@@ -497,8 +497,8 @@ export const TenantPortal = () => {
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                       {[
                         { id: 'dashboard', label: 'Balance', icon: CreditCard, color: 'bg-ruby/10 text-ruby' },
-                        { id: 'maintenance', label: 'Maintenance', icon: Wrench, color: 'bg-[#FD5A1E]/10 text-[#FD5A1E]' },
-                        { id: 'dashboard', label: 'Notices', icon: Bell, color: 'bg-[#FD5A1E]/10 text-[#FD5A1E]' },
+                        { id: 'maintenance', label: 'Maintenance', icon: Wrench, color: 'bg-app-accent/10 text-app-accent' },
+                        { id: 'dashboard', label: 'Notices', icon: Bell, color: 'bg-app-accent/10 text-app-accent' },
                       ].map((link) => (
                         <button
                           key={link.label}
@@ -506,7 +506,7 @@ export const TenantPortal = () => {
                             setActiveTab(link.id as any);
                             setSelectedMailbox(null);
                           }}
-                          className="p-6 rounded-3xl bg-white/[0.03] border border-white/5 hover:border-[#FD5A1E]/30 transition-all group text-center"
+                          className="p-6 rounded-3xl bg-white/[0.03] border border-white/5 hover:border-app-accent/30 transition-all group text-center"
                         >
                           <div className={`w-12 h-12 rounded-xl ${link.color} flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform shadow-lg`}>
                             <link.icon className="w-6 h-6" />
@@ -521,7 +521,7 @@ export const TenantPortal = () => {
                       <div className="mt-10 pt-10 border-t border-white/10">
                         <div className="flex items-center justify-between mb-6">
                           <div className="flex items-center gap-2">
-                            <Zap className="w-4 h-4 text-[#FD5A1E]" />
+                            <Zap className="w-4 h-4 text-app-accent" />
                             <div className="text-xs font-bold text-white/60 uppercase tracking-widest">
                               {auth.currentUser ? 'Paint Your Mailbox' : 'Sign in to Paint'}
                             </div>
