@@ -8,7 +8,9 @@
     "build": "vite build",
     "preview": "vite preview",
     "clean": "rm -rf dist",
-    "lint": "tsc --noEmit"
+    "lint": "tsc --noEmit",
+    "deploy:cloudflare": "npm run build && npx wrangler deploy",
+    "deploy:cloudflare:dry-run": "npm run build && npx wrangler deploy --dry-run"
   },
   "dependencies": {
     "@google/genai": "^1.29.0",
