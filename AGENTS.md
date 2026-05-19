@@ -2,16 +2,16 @@
 
 This document tracks persistent enhancements and project-specific rules for the Rent-Ruby application.
 
-## Core Aesthetic: Giants-Inspired Modern
-- **Color Palette**: Vibrant Orange (`#FF5F1F` / `app-accent`), Black/Deep Navy (`#0B1A2D`), and White.
+## Core Aesthetic: Ruby Street Modern
+- **Color Palette**: Deep Ruby Red (`#C41E3A` / `app-accent`), Near-Black (`#0F0F1A`), Warm Off-White (`#F5F3EF`), and White.
 - **Typography**: 
-  - Headings: Bold, tight-tracking sans-serif (Inter/font-sans).
-  - Accents: Elegant serif italics for subheadings and distances.
-  - Metadata: Bold, small-caps, wide-tracking for descriptions and badges.
+ - Headings: Bold, tight-tracking sans-serif (Space Grotesk/font-sans).
+ - Accents: Elegant serif italics for subheadings and distances.
+ - Metadata: Bold, small-caps, wide-tracking for descriptions and badges.
 - **Layout Patterns**: 
-  - Use `rounded-sm` for technical badges (e.g., "EST. 1924").
-  - Use `rounded-[2rem]` or `rounded-[2.5rem]` for main cards and sections.
-  - High-contrast elements with subtle glassmorphism (`bg-white/5 backdrop-blur-md`).
+ - Use `rounded-sm` for technical badges (e.g., "EST. 1924").
+ - Use `rounded-[2rem]` or `rounded-[2.5rem]` for main cards and sections.
+ - High-contrast elements with subtle glassmorphism (`bg-white/5 backdrop-blur-md`).
 
 ## Key Features & Enhancements
 

@@ -76,9 +76,9 @@ const revenueData = [
 ];
 
 const distributionData = [
-  { name: 'Residential', value: 65, color: '#A64B4B' },
-  { name: 'Commercial', value: 25, color: '#7A3333' },
-  { name: 'Short-term', value: 10, color: '#D18E8E' },
+  { name: 'Residential', value: 65, color: '#C41E3A' },
+  { name: 'Commercial', value: 25, color: '#8B0F23' },
+  { name: 'Short-term', value: 10, color: '#E8617A' },
 ];
 
 export default function App() {
@@ -215,9 +215,9 @@ export default function App() {
             className="pt-20"
           >
             {/* Hero Section */}
-            <section className="relative h-[90vh] flex items-center overflow-hidden bg-[#0B1A2D]">
-              {/* Grass-like organic background hint */}
-              <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_bottom,_#061a12_0%,_transparent_70%)] opacity-40"></div>
+            <section className="relative h-[90vh] flex items-center overflow-hidden bg-[#0F0F1A]">
+              {/* Subtle ruby glow at bottom */}
+              <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_bottom,_#1f0a10_0%,_transparent_70%)] opacity-60"></div>
               
               <div className="absolute inset-0 z-0 opacity-20">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-app-accent/20 via-transparent to-transparent"></div>
@@ -272,7 +272,7 @@ export default function App() {
             </section>
 
             {/* Neighborhood Landmarks Section */}
-            <section id="neighborhood" className="py-24 bg-[#0B1A2D] relative overflow-hidden">
+            <section id="neighborhood" className="py-24 bg-[#0F0F1A] relative overflow-hidden">
               <div className="max-w-7xl mx-auto px-6">
                 <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
                   <div>
@@ -425,7 +425,7 @@ export default function App() {
             <BuildingIntelligence />
 
             {/* Platform Ecosystem Presentation */}
-            <section id="platform-ecosystem" className="py-32 bg-[#0B1A2D] text-white">
+            <section id="platform-ecosystem" className="py-32 bg-[#0F0F1A] text-white">
               <div className="max-w-7xl mx-auto px-6">
                 <div className="text-center mb-24">
                   <div className="text-xs font-bold text-app-accent uppercase tracking-[0.4em] mb-4">The Ecosystem</div>
@@ -476,15 +476,15 @@ export default function App() {
                     initial={{ opacity: 0, x: 50 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
-                    className="p-12 rounded-[4rem] bg-white/5 border border-white/10 hover:border-[#FD5A1E]/30 transition-all group"
+                    className="p-12 rounded-[4rem] bg-white/5 border border-white/10 hover:border-app-accent/30 transition-all group"
                   >
                     <div className="flex items-center gap-4 mb-8">
-                      <div className="w-16 h-16 rounded-3xl bg-[#FD5A1E] flex items-center justify-center shadow-2xl">
+                      <div className="w-16 h-16 rounded-3xl bg-app-accent flex items-center justify-center shadow-2xl">
                         <Users className="w-8 h-8 text-white" />
                       </div>
                       <div>
                         <h3 className="text-3xl font-black uppercase tracking-tighter">Tenant Experience</h3>
-                        <p className="text-[#FD5A1E] text-[10px] font-bold uppercase tracking-widest">Community & Lifestyle</p>
+                        <p className="text-app-accent text-[10px] font-bold uppercase tracking-widest">Community & Lifestyle</p>
                       </div>
                     </div>
                     <div className="space-y-6">
