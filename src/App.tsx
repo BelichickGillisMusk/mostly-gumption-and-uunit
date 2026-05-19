@@ -76,9 +76,9 @@ const revenueData = [
 ];
 
 const distributionData = [
-  { name: 'Residential', value: 65, color: '#A64B4B' },
-  { name: 'Commercial', value: 25, color: '#7A3333' },
-  { name: 'Short-term', value: 10, color: '#D18E8E' },
+  { name: 'Residential', value: 65, color: '#2563EB' },
+  { name: 'Commercial', value: 25, color: '#1D4ED8' },
+  { name: 'Short-term', value: 10, color: '#60A5FA' },
 ];
 
 export default function App() {
@@ -215,7 +215,7 @@ export default function App() {
             className="pt-20"
           >
             {/* Hero Section */}
-            <section className="relative h-[90vh] flex items-center overflow-hidden bg-[#0B1A2D]">
+            <section className="relative h-[90vh] flex items-center overflow-hidden bg-[#020617]">
               {/* Grass-like organic background hint */}
               <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_bottom,_#061a12_0%,_transparent_70%)] opacity-40"></div>
               
@@ -272,7 +272,7 @@ export default function App() {
             </section>
 
             {/* Neighborhood Landmarks Section */}
-            <section id="neighborhood" className="py-24 bg-[#0B1A2D] relative overflow-hidden">
+            <section id="neighborhood" className="py-24 bg-[#020617] relative overflow-hidden">
               <div className="max-w-7xl mx-auto px-6">
                 <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
                   <div>
@@ -326,7 +326,7 @@ export default function App() {
                   { title: 'Transit Heart', desc: 'A 10-minute stroll to MacArthur BART connects you to the entire Bay Area.', icon: Train, color: 'bg-ruby/10 text-ruby' },
                   { title: 'Secure Living', desc: '24/7 Amazon Hub lockers ensure your packages are as safe as your home.', icon: Package, color: 'bg-ruby-light/10 text-ruby-light' },
                   { title: 'Mosswood Vibe', desc: 'Acres of historic green space and recreation right at your doorstep.', icon: TreePine, color: 'bg-ruby/10 text-ruby' },
-                  { title: 'Medical Hub', desc: 'Steps from Kaiser and Alta Bates—the city\'s premier medical district.', icon: Hospital, color: 'bg-red-50 text-red-600' },
+                  { title: 'Medical Hub', desc: 'Steps from Kaiser and Alta Bates—the city\'s premier medical district.', icon: Hospital, color: 'bg-app-accent/10 text-app-accent' },
                 ].map((item, i) => (
                   <motion.div
                     key={item.title}
@@ -425,7 +425,7 @@ export default function App() {
             <BuildingIntelligence />
 
             {/* Platform Ecosystem Presentation */}
-            <section id="platform-ecosystem" className="py-32 bg-[#0B1A2D] text-white">
+            <section id="platform-ecosystem" className="py-32 bg-[#020617] text-white">
               <div className="max-w-7xl mx-auto px-6">
                 <div className="text-center mb-24">
                   <div className="text-xs font-bold text-app-accent uppercase tracking-[0.4em] mb-4">The Ecosystem</div>
@@ -476,15 +476,15 @@ export default function App() {
                     initial={{ opacity: 0, x: 50 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
-                    className="p-12 rounded-[4rem] bg-white/5 border border-white/10 hover:border-[#FD5A1E]/30 transition-all group"
+                    className="p-12 rounded-[4rem] bg-white/5 border border-white/10 hover:border-app-accent/30 transition-all group"
                   >
                     <div className="flex items-center gap-4 mb-8">
-                      <div className="w-16 h-16 rounded-3xl bg-[#FD5A1E] flex items-center justify-center shadow-2xl">
+                      <div className="w-16 h-16 rounded-3xl bg-app-accent flex items-center justify-center shadow-2xl">
                         <Users className="w-8 h-8 text-white" />
                       </div>
                       <div>
                         <h3 className="text-3xl font-black uppercase tracking-tighter">Tenant Experience</h3>
-                        <p className="text-[#FD5A1E] text-[10px] font-bold uppercase tracking-widest">Community & Lifestyle</p>
+                        <p className="text-app-accent text-[10px] font-bold uppercase tracking-widest">Community & Lifestyle</p>
                       </div>
                     </div>
                     <div className="space-y-6">
@@ -860,8 +860,8 @@ export default function App() {
                       <AreaChart data={revenueData}>
                         <defs>
                           <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor="#C14931" stopOpacity={0.3}/>
-                            <stop offset="95%" stopColor="#C14931" stopOpacity={0}/>
+                            <stop offset="5%" stopColor="#2563EB" stopOpacity={0.3}/>
+                            <stop offset="95%" stopColor="#2563EB" stopOpacity={0}/>
                           </linearGradient>
                         </defs>
                         <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
@@ -870,7 +870,7 @@ export default function App() {
                         <Tooltip 
                           contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }}
                         />
-                        <Area type="monotone" dataKey="revenue" stroke="#C14931" strokeWidth={3} fillOpacity={1} fill="url(#colorRev)" />
+                        <Area type="monotone" dataKey="revenue" stroke="#2563EB" strokeWidth={3} fillOpacity={1} fill="url(#colorRev)" />
                       </AreaChart>
                     </ResponsiveContainer>
                   </div>
