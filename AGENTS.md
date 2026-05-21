@@ -38,3 +38,26 @@ This document tracks persistent enhancements and project-specific rules for the 
 - **Animations**: Always use `motion/react`.
 - **Styling**: Strictly Tailwind CSS.
 - **Data**: Prefer real-time patterns with `onSnapshot` if Firebase is used.
+
+## Cursor Cloud specific instructions
+
+### Services
+
+| Service | Command | Port | Notes |
+|---------|---------|------|-------|
+| Dev server (Express + Vite) | `npm run dev` | 3000 | Serves React SPA + all `/api/*` REST endpoints |
+
+### Key commands
+
+- **Lint**: `npm run lint` (runs `tsc --noEmit`)
+- **Build**: `npm run build` (Vite production build)
+- **Dev**: `npm run dev` (Express + Vite dev server via `tsx server.ts`)
+
+### Non-obvious notes
+
+- The dev server is a single process (`tsx server.ts`) that runs both the Express API backend and the Vite dev middleware for the React frontend.
+- SQLite database (`rentroll_v3.db`) is auto-created and seeded on first server start — no migration step needed.
+- The `/api/units` route does not exist; use `/api/rent-roll` for unit/tenant data.
+- `GEMINI_API_KEY` env var is optional — the app runs fully without it but AI features (image generation, CEO briefing, marketing) will fail gracefully.
+- Firebase Auth and Firestore are optional cloud dependencies used only for mailbox customization persistence; core app works without them.
+- The Rent Roll in the Admin view is security-gated behind a double-click interaction on the "Double Click for Rent Roll" button.
