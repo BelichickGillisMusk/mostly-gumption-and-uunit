@@ -88,6 +88,21 @@ export default function App() {
   const [rentRollUnlocked, setRentRollUnlocked] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showOwnerVision, setShowOwnerVision] = useState(false);
+  const [showAdminModal, setShowAdminModal] = useState(false);
+  const [adminPassword, setAdminPassword] = useState('');
+  const [adminPasswordError, setAdminPasswordError] = useState(false);
+
+  const handleAdminUnlock = () => {
+    if (adminPassword === '1225') {
+      setView('admin');
+      setShowAdminModal(false);
+      setAdminPassword('');
+      setAdminPasswordError(false);
+    } else {
+      setAdminPasswordError(true);
+      setAdminPassword('');
+    }
+  };
 
   return (
     <div className={`min-h-screen font-sans selection:bg-app-accent/30 transition-colors duration-700`}>
@@ -147,16 +162,14 @@ export default function App() {
               >
                 Hub
               </button>
-              <button 
-                onClick={() => setView('admin')}
-                className={`px-3 sm:px-4 py-1.5 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest rounded-full transition-all duration-300 ${
-                  view === 'admin' 
-                  ? 'bg-app-accent text-white shadow-lg' 
-                  : 'text-app-text/60 hover:text-app-text'
-                }`}
-              >
-                Admin
-              </button>
+              {view === 'admin' && (
+                <button 
+                  onClick={() => setView('admin')}
+                  className="px-3 sm:px-4 py-1.5 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest rounded-full transition-all duration-300 bg-app-accent text-white shadow-lg"
+                >
+                  Admin
+                </button>
+              )}
               <button 
                 onClick={() => setView('tenant')}
                 className={`px-3 sm:px-4 py-1.5 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest rounded-full transition-all duration-300 ${
@@ -1057,6 +1070,74 @@ export default function App() {
         )}
       </AnimatePresence>
 
+      {/* Admin Password Modal */}
+      <AnimatePresence>
+        {showAdminModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-sm px-4"
+            onClick={(e) => { if (e.target === e.currentTarget) { setShowAdminModal(false); setAdminPassword(''); setAdminPasswordError(false); } }}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+              className="bg-app-card border border-app-border rounded-[2rem] p-8 w-full max-w-sm shadow-2xl"
+            >
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 rounded-xl bg-app-accent/10 border border-app-accent/20 flex items-center justify-center">
+                  <ShieldCheck className="w-5 h-5 text-app-accent" />
+                </div>
+                <div>
+                  <div className="text-xs font-bold uppercase tracking-[0.2em] text-app-text/40 mb-0.5">Owner Portal</div>
+                  <div className="text-lg font-black text-app-text tracking-tight">Admin Access</div>
+                </div>
+              </div>
+              <p className="text-xs text-app-text/50 font-bold uppercase tracking-widest mb-5">Enter your access code to continue</p>
+              <input
+                type="password"
+                value={adminPassword}
+                onChange={(e) => { setAdminPassword(e.target.value); setAdminPasswordError(false); }}
+                onKeyDown={(e) => e.key === 'Enter' && handleAdminUnlock()}
+                placeholder="••••"
+                autoFocus
+                className={`w-full px-4 py-3 rounded-xl bg-app-bg border text-app-text text-center text-2xl tracking-[0.5em] font-black outline-none transition-all ${
+                  adminPasswordError 
+                    ? 'border-red-500/60 placeholder:text-red-400/40' 
+                    : 'border-app-border focus:border-app-accent/60'
+                }`}
+              />
+              {adminPasswordError && (
+                <motion.p
+                  initial={{ opacity: 0, y: -4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-[10px] font-bold uppercase tracking-widest text-red-400 text-center mt-2"
+                >
+                  Incorrect code — try again
+                </motion.p>
+              )}
+              <div className="flex gap-3 mt-5">
+                <button
+                  onClick={() => { setShowAdminModal(false); setAdminPassword(''); setAdminPasswordError(false); }}
+                  className="flex-1 py-2.5 rounded-xl border border-app-border text-app-text/50 text-[10px] font-bold uppercase tracking-widest hover:border-app-text/30 transition-all"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleAdminUnlock}
+                  className="flex-1 py-2.5 rounded-xl bg-app-accent text-white text-[10px] font-bold uppercase tracking-widest hover:bg-app-accent/90 transition-all"
+                >
+                  Unlock
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <footer className="py-12 border-t border-app-text/5 bg-app-card/30">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="flex items-center gap-3">
@@ -1066,6 +1147,19 @@ export default function App() {
           <div className="text-[10px] font-bold text-app-text/30 uppercase tracking-[0.2em]">
             © 2026 Silverbackai.agency • All Rights Reserved • Software Provider
           </div>
+          <button
+            onClick={() => {
+              if (view === 'admin') {
+                setView('hub');
+              } else {
+                setShowAdminModal(true);
+              }
+            }}
+            className="flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-[0.2em] text-app-text/30 hover:text-app-text/60 transition-colors"
+          >
+            <ShieldCheck className="w-3 h-3" />
+            {view === 'admin' ? 'Exit Admin' : 'Owner Access'}
+          </button>
         </div>
       </footer>
     </div>
