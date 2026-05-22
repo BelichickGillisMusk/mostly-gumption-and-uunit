@@ -337,12 +337,12 @@ export const MaintenanceModule: React.FC = () => {
 
                     {selectedRequest.status === 'Escalated to Owner' && (
                       <div>
-                        <label className="text-[10px] font-black text-orange-500 uppercase tracking-widest block mb-2">Owner Approval Notes</label>
+                        <label className="text-[10px] font-black text-app-accent uppercase tracking-widest block mb-2">Owner Approval Notes</label>
                         <textarea
                           value={selectedRequest.approval_notes || ''}
                           onChange={(e) => handleUpdateStatus(selectedRequest!.id, { approval_notes: e.target.value })}
                           placeholder="Owner feedback on cost/emergency..."
-                          className="w-full bg-orange-500/5 border border-orange-500/20 rounded-xl p-4 text-sm text-app-text focus:outline-none focus:ring-2 focus:ring-orange-500/50 min-h-[100px]"
+                          className="w-full bg-app-accent/5 border border-app-accent/20 rounded-xl p-4 text-sm text-app-text focus:outline-none focus:ring-2 focus:ring-app-accent/50 min-h-[100px]"
                         />
                       </div>
                     )}

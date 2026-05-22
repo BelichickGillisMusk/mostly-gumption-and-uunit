@@ -10,7 +10,7 @@ const hotspots = [
     icon: Package,
     top: '75%',
     left: '20%',
-    color: 'bg-orange-500'
+    color: 'bg-app-accent'
   },
   {
     id: 'entry',

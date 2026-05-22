@@ -326,7 +326,7 @@ export default function App() {
                   { title: 'Transit Heart', desc: 'A 10-minute stroll to MacArthur BART connects you to the entire Bay Area.', icon: Train, color: 'bg-ruby/10 text-ruby' },
                   { title: 'Secure Living', desc: '24/7 Amazon Hub lockers ensure your packages are as safe as your home.', icon: Package, color: 'bg-ruby-light/10 text-ruby-light' },
                   { title: 'Mosswood Vibe', desc: 'Acres of historic green space and recreation right at your doorstep.', icon: TreePine, color: 'bg-ruby/10 text-ruby' },
-                  { title: 'Medical Hub', desc: 'Steps from Kaiser and Alta Bates—the city\'s premier medical district.', icon: Hospital, color: 'bg-red-50 text-red-600' },
+                  { title: 'Medical Hub', desc: 'Steps from Kaiser and Alta Bates—the city\'s premier medical district.', icon: Hospital, color: 'bg-ruby-light/10 text-ruby-dark' },
                 ].map((item, i) => (
                   <motion.div
                     key={item.title}
@@ -860,8 +860,8 @@ export default function App() {
                       <AreaChart data={revenueData}>
                         <defs>
                           <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor="#C14931" stopOpacity={0.3}/>
-                            <stop offset="95%" stopColor="#C14931" stopOpacity={0}/>
+                            <stop offset="5%" stopColor="#C41E3A" stopOpacity={0.3}/>
+                            <stop offset="95%" stopColor="#C41E3A" stopOpacity={0}/>
                           </linearGradient>
                         </defs>
                         <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
@@ -870,7 +870,7 @@ export default function App() {
                         <Tooltip 
                           contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }}
                         />
-                        <Area type="monotone" dataKey="revenue" stroke="#C14931" strokeWidth={3} fillOpacity={1} fill="url(#colorRev)" />
+                        <Area type="monotone" dataKey="revenue" stroke="#C41E3A" strokeWidth={3} fillOpacity={1} fill="url(#colorRev)" />
                       </AreaChart>
                     </ResponsiveContainer>
                   </div>
