@@ -89,6 +89,21 @@ export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showOwnerVision, setShowOwnerVision] = useState(false);
 
+  const handleAdminOwnerAccess = () => {
+    const password = window.prompt('Enter admin / owner password');
+
+    if (password === null) {
+      return;
+    }
+
+    if (password === '1225') {
+      setView('admin');
+      return;
+    }
+
+    window.alert('Incorrect password. Please try again.');
+  };
+
   return (
     <div className={`min-h-screen font-sans selection:bg-app-accent/30 transition-colors duration-700`}>
       {view === 'admin' && <ShimmerBackground />}
@@ -146,16 +161,6 @@ export default function App() {
                 }`}
               >
                 Hub
-              </button>
-              <button 
-                onClick={() => setView('admin')}
-                className={`px-3 sm:px-4 py-1.5 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest rounded-full transition-all duration-300 ${
-                  view === 'admin' 
-                  ? 'bg-app-accent text-white shadow-lg' 
-                  : 'text-app-text/60 hover:text-app-text'
-                }`}
-              >
-                Admin
               </button>
               <button 
                 onClick={() => setView('tenant')}
@@ -747,6 +752,13 @@ export default function App() {
                 <div className="flex gap-10 text-[11px] font-bold uppercase tracking-widest text-app-text/60">
                   <a href="#" className="hover:text-app-accent transition-colors border-b border-transparent hover:border-app-accent pb-1">Privacy</a>
                   <a href="#" className="hover:text-app-accent transition-colors border-b border-transparent hover:border-app-accent pb-1">Terms</a>
+                  <button
+                    type="button"
+                    onClick={handleAdminOwnerAccess}
+                    className="hover:text-app-accent transition-colors border-b border-transparent hover:border-app-accent pb-1"
+                  >
+                    Admin / Owner
+                  </button>
                 </div>
               </div>
             </footer>
@@ -1063,6 +1075,14 @@ export default function App() {
             <div className="w-8 h-8 rounded-lg bg-ruby flex items-center justify-center text-white font-black text-xs">SB</div>
             <span className="text-sm font-black text-app-text uppercase tracking-widest">Silverbackai.agency</span>
           </div>
+          <button
+            type="button"
+            onClick={handleAdminOwnerAccess}
+            className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-app-text/50 hover:text-app-accent transition-colors"
+          >
+            <ShieldCheck className="w-3.5 h-3.5" />
+            Admin / Owner
+          </button>
           <div className="text-[10px] font-bold text-app-text/30 uppercase tracking-[0.2em]">
             © 2026 Silverbackai.agency • All Rights Reserved • Software Provider
           </div>
