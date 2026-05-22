@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   TrendingUp, 
@@ -25,6 +25,7 @@ import {
   Info,
   Menu,
   X,
+  Lock,
   Share2,
   DollarSign,
   Activity,
@@ -81,6 +82,8 @@ const distributionData = [
   { name: 'Short-term', value: 10, color: '#A9BFA4' },
 ];
 
+const ADMIN_ACCESS_CODE = '1225';
+
 export default function App() {
   const { theme } = useTheme();
   const [view, setView] = useState<'hub' | 'admin' | 'tenant'>('hub');
@@ -88,6 +91,39 @@ export default function App() {
   const [rentRollUnlocked, setRentRollUnlocked] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showOwnerVision, setShowOwnerVision] = useState(false);
+  const [adminUnlocked, setAdminUnlocked] = useState(false);
+  const [showAdminPasswordModal, setShowAdminPasswordModal] = useState(false);
+  const [adminPassword, setAdminPassword] = useState('');
+  const [adminPasswordError, setAdminPasswordError] = useState('');
+
+  useEffect(() => {
+    if (view === 'admin' && !adminUnlocked) {
+      setView('hub');
+    }
+  }, [view, adminUnlocked]);
+
+  const openAdminAccess = () => {
+    if (adminUnlocked) {
+      setView('admin');
+      return;
+    }
+    setAdminPassword('');
+    setAdminPasswordError('');
+    setShowAdminPasswordModal(true);
+  };
+
+  const submitAdminPassword = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (adminPassword === ADMIN_ACCESS_CODE) {
+      setAdminUnlocked(true);
+      setView('admin');
+      setShowAdminPasswordModal(false);
+      setAdminPassword('');
+      setAdminPasswordError('');
+      return;
+    }
+    setAdminPasswordError('Incorrect access code. Please try again.');
+  };
 
   return (
     <div className={`min-h-screen font-sans selection:bg-app-accent/30 transition-colors duration-700`}>
@@ -96,6 +132,74 @@ export default function App() {
       <AnimatePresence>
         {showOwnerVision && (
           <OwnerPresentation onClose={() => setShowOwnerVision(false)} />
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {showAdminPasswordModal && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowAdminPasswordModal(false)}
+              className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+            />
+            <motion.form
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              onSubmit={submitAdminPassword}
+              className="relative w-full max-w-md bg-zinc-900 border border-white/10 rounded-3xl overflow-hidden shadow-2xl p-6"
+            >
+              <div className="flex items-center justify-between mb-6">
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center border bg-app-accent/10 text-app-accent border-app-accent/20">
+                  <Lock className="w-6 h-6" />
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowAdminPasswordModal(false)}
+                  className="p-2 text-zinc-500 hover:text-white transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              <h3 className="text-xl font-bold text-white mb-2 font-serif">Admin / Owner Access</h3>
+              <p className="text-zinc-400 text-sm leading-relaxed mb-6">
+                Enter the property access code to open the management portal.
+              </p>
+              <input
+                type="password"
+                inputMode="numeric"
+                autoComplete="off"
+                value={adminPassword}
+                onChange={(e) => {
+                  setAdminPassword(e.target.value);
+                  setAdminPasswordError('');
+                }}
+                placeholder="Access code"
+                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white font-mono tracking-widest placeholder:text-zinc-600 focus:outline-none focus:border-app-accent/50 mb-2"
+              />
+              {adminPasswordError && (
+                <p className="text-ruby text-xs font-bold mb-4">{adminPasswordError}</p>
+              )}
+              <div className="flex gap-3 mt-6">
+                <button
+                  type="button"
+                  onClick={() => setShowAdminPasswordModal(false)}
+                  className="flex-1 py-3 px-4 bg-white/5 hover:bg-white/10 text-white font-bold rounded-xl border border-white/10 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 py-3 px-4 bg-app-accent hover:bg-app-accent/90 text-white font-bold rounded-xl transition-colors"
+                >
+                  Enter Portal
+                </button>
+              </div>
+            </motion.form>
+          </div>
         )}
       </AnimatePresence>
       {/* Navigation */}
@@ -146,16 +250,6 @@ export default function App() {
                 }`}
               >
                 Hub
-              </button>
-              <button 
-                onClick={() => setView('admin')}
-                className={`px-3 sm:px-4 py-1.5 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest rounded-full transition-all duration-300 ${
-                  view === 'admin' 
-                  ? 'bg-app-accent text-white shadow-lg' 
-                  : 'text-app-text/60 hover:text-app-text'
-                }`}
-              >
-                Admin
               </button>
               <button 
                 onClick={() => setView('tenant')}
@@ -723,7 +817,15 @@ export default function App() {
                   <div className="text-xs font-black uppercase tracking-widest text-app-text/50">Navigation</div>
                   <ul className="space-y-4 text-sm font-bold">
                     <li><a href="#" className="text-app-text/70 hover:text-app-accent transition-colors">Available Units</a></li>
-                    <li><a href="#" className="text-app-text/70 hover:text-app-accent transition-colors">Tenant Portal</a></li>
+                    <li>
+                      <button
+                        type="button"
+                        onClick={() => setView('tenant')}
+                        className="text-app-text/70 hover:text-app-accent transition-colors text-left"
+                      >
+                        Tenant Portal
+                      </button>
+                    </li>
                     <li><a href="#" className="text-app-text/70 hover:text-app-accent transition-colors">Maintenance Request</a></li>
                   </ul>
                 </div>
@@ -744,7 +846,14 @@ export default function App() {
                   <div className="text-[10px] font-black text-app-accent uppercase tracking-widest">Powered by</div>
                   <div className="text-2xl font-black tracking-tighter text-app-text uppercase">SILVERBACKAI.AGENCY</div>
                 </div>
-                <div className="flex gap-10 text-[11px] font-bold uppercase tracking-widest text-app-text/60">
+                <div className="flex flex-wrap justify-center gap-10 text-[11px] font-bold uppercase tracking-widest text-app-text/60">
+                  <button
+                    type="button"
+                    onClick={openAdminAccess}
+                    className="hover:text-app-accent transition-colors border-b border-transparent hover:border-app-accent pb-1"
+                  >
+                    Admin / Owner
+                  </button>
                   <a href="#" className="hover:text-app-accent transition-colors border-b border-transparent hover:border-app-accent pb-1">Privacy</a>
                   <a href="#" className="hover:text-app-accent transition-colors border-b border-transparent hover:border-app-accent pb-1">Terms</a>
                 </div>
@@ -1063,8 +1172,17 @@ export default function App() {
             <div className="w-8 h-8 rounded-lg bg-ruby flex items-center justify-center text-white font-black text-xs">SB</div>
             <span className="text-sm font-black text-app-text uppercase tracking-widest">Silverbackai.agency</span>
           </div>
-          <div className="text-[10px] font-bold text-app-text/30 uppercase tracking-[0.2em]">
-            © 2026 Silverbackai.agency • All Rights Reserved • Software Provider
+          <div className="flex flex-col items-center gap-3">
+            <button
+              type="button"
+              onClick={openAdminAccess}
+              className="text-[10px] font-bold text-app-text/40 hover:text-app-accent uppercase tracking-[0.2em] transition-colors"
+            >
+              Admin / Owner
+            </button>
+            <div className="text-[10px] font-bold text-app-text/30 uppercase tracking-[0.2em]">
+              © 2026 Silverbackai.agency • All Rights Reserved • Software Provider
+            </div>
           </div>
         </div>
       </footer>
