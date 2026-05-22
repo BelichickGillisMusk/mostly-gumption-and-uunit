@@ -7,6 +7,9 @@ import cookieParser from "cookie-parser";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const ADMIN_ACCESS_COOKIE_NAME = "rentruby_admin_access";
+const ADMIN_ACCESS_COOKIE_VALUE = "granted";
+const ADMIN_ACCESS_PASSWORD = process.env.ADMIN_ACCESS_PASSWORD ?? "1225";
 
 const db = new Database("rentroll_v3.db");
 
@@ -457,6 +460,8 @@ if (propertyCount.count === 0) {
 async function startServer() {
   const app = express();
   const PORT = 3000;
+  const hasAdminAccess = (cookieValue: unknown) =>
+    cookieValue === ADMIN_ACCESS_COOKIE_VALUE;
 
   app.use(express.json());
   app.use(cookieParser());
@@ -475,6 +480,30 @@ async function startServer() {
   app.get("/api/cookie-verify", (req, res) => {
     const isCookieActive = req.cookies.dmc_cookie_test === "active";
     res.json({ active: isCookieActive });
+  });
+
+  app.get("/api/admin-access", (req, res) => {
+    res.json({
+      authenticated: hasAdminAccess(req.cookies[ADMIN_ACCESS_COOKIE_NAME]),
+    });
+  });
+
+  app.post("/api/admin-access", (req, res) => {
+    const submittedPassword = String(req.body?.password ?? "").trim();
+
+    if (submittedPassword !== ADMIN_ACCESS_PASSWORD) {
+      res.status(401).json({ authenticated: false });
+      return;
+    }
+
+    res.cookie(ADMIN_ACCESS_COOKIE_NAME, ADMIN_ACCESS_COOKIE_VALUE, {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 1000 * 60 * 60 * 8,
+    });
+
+    res.json({ authenticated: true });
   });
 
   // API Routes

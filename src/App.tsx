@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   TrendingUp, 
@@ -65,6 +65,7 @@ import { BuildingIntelligence } from './components/BuildingIntelligence';
 import { ProductTour } from './components/ProductTour';
 import { OwnerPresentation } from './components/OwnerPresentation';
 import { NeighborhoodRadiusMap } from './components/NeighborhoodRadiusMap';
+import { FooterAdminAccess } from './components/FooterAdminAccess';
 
 const revenueData = [
   { month: 'Jan', revenue: 45000, occupancy: 92 },
@@ -85,9 +86,37 @@ export default function App() {
   const { theme } = useTheme();
   const [view, setView] = useState<'hub' | 'admin' | 'tenant'>('hub');
   const [adminTab, setAdminTab] = useState<'portfolio' | 'rent-roll' | 'maintenance' | 'marketing' | 'community' | 'ceo' | 'sfplus' | 'marketmax' | 'vendors' | 'concerns'>('portfolio');
+  const [hasAdminAccess, setHasAdminAccess] = useState(false);
   const [rentRollUnlocked, setRentRollUnlocked] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showOwnerVision, setShowOwnerVision] = useState(false);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    fetch('/api/admin-access', {
+      credentials: 'same-origin',
+    })
+      .then(async (response) => {
+        if (!response.ok) {
+          throw new Error('Unable to verify admin access');
+        }
+
+        const data = await response.json() as { authenticated?: boolean };
+        if (isMounted) {
+          setHasAdminAccess(Boolean(data.authenticated));
+        }
+      })
+      .catch(() => {
+        if (isMounted) {
+          setHasAdminAccess(false);
+        }
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   return (
     <div className={`min-h-screen font-sans selection:bg-app-accent/30 transition-colors duration-700`}>
@@ -148,16 +177,6 @@ export default function App() {
                 Hub
               </button>
               <button 
-                onClick={() => setView('admin')}
-                className={`px-3 sm:px-4 py-1.5 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest rounded-full transition-all duration-300 ${
-                  view === 'admin' 
-                  ? 'bg-app-accent text-white shadow-lg' 
-                  : 'text-app-text/60 hover:text-app-text'
-                }`}
-              >
-                Admin
-              </button>
-              <button 
                 onClick={() => setView('tenant')}
                 className={`px-3 sm:px-4 py-1.5 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest rounded-full transition-all duration-300 ${
                   view === 'tenant' 
@@ -168,6 +187,11 @@ export default function App() {
                 Tenant
               </button>
             </div>
+            {view === 'admin' && hasAdminAccess && (
+              <div className="hidden sm:flex items-center rounded-full border border-app-accent/20 bg-app-accent/10 px-4 py-2 text-[10px] font-black uppercase tracking-[0.3em] text-app-accent">
+                Owner Mode
+              </div>
+            )}
 
             <button className={`md:hidden p-2 ${view === 'hub' ? 'text-app-text' : 'text-white'}`} onClick={() => setIsMenuOpen(!isMenuOpen)}>
               {isMenuOpen ? <X /> : <Menu />}
@@ -752,14 +776,15 @@ export default function App() {
             </footer>
           </motion.div>
         ) : view === 'admin' ? (
-          <motion.div
-            key="admin"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="min-h-screen bg-app-bg pt-32 pb-20 px-6"
-          >
-            <div className="max-w-7xl mx-auto">
+          hasAdminAccess ? (
+            <motion.div
+              key="admin"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="min-h-screen bg-app-bg pt-32 pb-20 px-6"
+            >
+              <div className="max-w-7xl mx-auto">
               {/* Portal Header */}
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6">
                 <div>
@@ -1036,8 +1061,29 @@ export default function App() {
               <section id="summary-sheet">
                 <FeatureSummarySheet />
               </section>
-            </div>
-          </motion.div>
+              </div>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="admin-locked"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="min-h-screen bg-app-bg pt-32 pb-20 px-6"
+            >
+              <div className="mx-auto max-w-3xl rounded-[2.5rem] border border-app-border bg-app-card p-10 text-center shadow-sm">
+                <div className="text-[10px] font-black uppercase tracking-[0.3em] text-app-accent">
+                  Restricted Access
+                </div>
+                <h2 className="mt-4 text-4xl font-serif font-black text-app-text">
+                  Owner portal locked.
+                </h2>
+                <p className="mt-4 text-base font-medium text-app-text/60">
+                  Use the Admin / Owner control in the footer and enter the password to open the admin workspace.
+                </p>
+              </div>
+            </motion.div>
+          )
         ) : (
           <motion.div
             key="tenant"
@@ -1066,6 +1112,15 @@ export default function App() {
           <div className="text-[10px] font-bold text-app-text/30 uppercase tracking-[0.2em]">
             © 2026 Silverbackai.agency • All Rights Reserved • Software Provider
           </div>
+          <FooterAdminAccess
+            isUnlocked={hasAdminAccess}
+            onAccessGranted={() => {
+              setHasAdminAccess(true);
+              setView('admin');
+              setAdminTab('portfolio');
+              setIsMenuOpen(false);
+            }}
+          />
         </div>
       </footer>
     </div>
