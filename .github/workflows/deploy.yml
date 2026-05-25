@@ -8,6 +8,7 @@ on:
 
 jobs:
   deploy:
+    name: Build and deploy to Cloudflare Pages
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -30,10 +31,35 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
+      - name: Verify Cloudflare secrets are configured
+        if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
+        env:
+          CF_TOKEN: ${{ secrets.CLOUDFLARE_TOKEN }}
+          CF_ACCOUNT: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          missing=0
+          if [ -z "$CF_TOKEN" ]; then
+            echo "::error::Org secret CLOUDFLARE_TOKEN is empty or not accessible to this repo."
+            missing=1
+          fi
+          if [ -z "$CF_ACCOUNT" ]; then
+            echo "::error::Org secret CLOUDFLARE_ACCOUNT_ID is not set."
+            missing=1
+          fi
+          if [ "$missing" -eq 1 ]; then
+            echo "::error::See DEPLOYMENT.md → 'Where the secrets live' for the org settings URL and step-by-step fix."
+            exit 1
+          fi
+          echo "Cloudflare secrets present (token length: ${#CF_TOKEN}, account length: ${#CF_ACCOUNT})."
+
+      # Secrets are managed at the ORG level:
+      #   https://github.com/organizations/BelichickGillisMusk/settings/secrets/actions
+      # See DEPLOYMENT.md for full setup instructions.
       - name: Deploy to Cloudflare Pages
+        if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
         uses: cloudflare/pages-action@v1
         with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          apiToken: ${{ secrets.CLOUDFLARE_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           projectName: rent-ruby
           directory: dist
