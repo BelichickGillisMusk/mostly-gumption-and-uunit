@@ -101,7 +101,7 @@ export const OwnerPresentation = ({ onClose }: { onClose: () => void }) => {
   const slide = slides[currentSlide];
 
   return (
-    <div className="fixed inset-0 z-[200] bg-[#17251F] flex flex-col print:bg-white print:relative print:inset-auto print:z-0 print:flex-none">
+    <div className="fixed inset-0 z-[200] bg-[#0F0F1A] flex flex-col print:bg-white print:relative print:inset-auto print:z-0 print:flex-none">
       {/* Print-only Styles */}
       <style dangerouslySetInnerHTML={{ __html: `
         @media print {
@@ -151,8 +151,8 @@ export const OwnerPresentation = ({ onClose }: { onClose: () => void }) => {
               referrerPolicy="no-referrer"
             />
           </AnimatePresence>
-          <div className="absolute inset-0 bg-gradient-to-r from-[#17251F] via-transparent to-transparent hidden lg:block"></div>
-          <div className="absolute inset-0 bg-gradient-to-t from-[#17251F] via-transparent to-transparent lg:hidden"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0F0F1A] via-transparent to-transparent hidden lg:block"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0F0F1A] via-transparent to-transparent lg:hidden"></div>
           
           <div className="absolute bottom-12 left-12 hidden lg:block">
             <div className="flex items-center gap-4">
@@ -222,7 +222,7 @@ export const OwnerPresentation = ({ onClose }: { onClose: () => void }) => {
       </div>
 
       {/* Navigation Bar (Screen Only) */}
-      <div className="p-8 lg:p-12 border-t border-white/5 flex justify-between items-center bg-[#17251F] no-print">
+      <div className="p-8 lg:p-12 border-t border-white/5 flex justify-between items-center bg-[#0F0F1A] no-print">
         <div className="flex gap-4">
           <button 
             onClick={prev} 

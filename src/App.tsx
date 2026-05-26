@@ -76,9 +76,9 @@ const revenueData = [
 ];
 
 const distributionData = [
-  { name: 'Residential', value: 65, color: '#5F7F67' },
-  { name: 'Commercial', value: 25, color: '#294236' },
-  { name: 'Short-term', value: 10, color: '#A9BFA4' },
+  { name: 'Residential', value: 65, color: '#C41E3A' },
+  { name: 'Commercial', value: 25, color: '#8B0F23' },
+  { name: 'Short-term', value: 10, color: '#E8617A' },
 ];
 
 export default function App() {
@@ -215,9 +215,9 @@ export default function App() {
             className="pt-20"
           >
             {/* Hero Section */}
-            <section className="relative h-[90vh] flex items-center overflow-hidden bg-[#17251F]">
-              {/* Grass-like organic background hint */}
-              <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_bottom,_#061a12_0%,_transparent_70%)] opacity-40"></div>
+            <section className="relative h-[90vh] flex items-center overflow-hidden bg-[#0F0F1A]">
+              {/* Subtle ruby glow at bottom */}
+              <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_bottom,_#1f0a10_0%,_transparent_70%)] opacity-60"></div>
               
               <div className="absolute inset-0 z-0 opacity-20">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-app-accent/20 via-transparent to-transparent"></div>
@@ -245,7 +245,7 @@ export default function App() {
                       The Ultimate <span className="text-app-accent">Oakland</span> Lifestyle.
                     </div>
                     <div className="mt-8 flex items-center gap-2">
-                      <span className="text-xl font-sans font-bold text-[#D5C08C] uppercase tracking-tight">POSITIVE VIBES LIVE HERE</span>
+                      <span className="text-xl font-sans font-bold text-blue-400 uppercase tracking-tight">POSITIVE VIBES LIVE HERE</span>
                       <span className="text-xl font-sans font-bold text-white/40 uppercase tracking-tight">STORY.</span>
                     </div>
                     <div className="mt-12 flex flex-col sm:flex-row gap-6">
@@ -272,7 +272,7 @@ export default function App() {
             </section>
 
             {/* Neighborhood Landmarks Section */}
-            <section id="neighborhood" className="py-24 bg-[#17251F] relative overflow-hidden">
+            <section id="neighborhood" className="py-24 bg-[#0F0F1A] relative overflow-hidden">
               <div className="max-w-7xl mx-auto px-6">
                 <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
                   <div>
@@ -425,7 +425,7 @@ export default function App() {
             <BuildingIntelligence />
 
             {/* Platform Ecosystem Presentation */}
-            <section id="platform-ecosystem" className="py-32 bg-[#17251F] text-white">
+            <section id="platform-ecosystem" className="py-32 bg-[#0F0F1A] text-white">
               <div className="max-w-7xl mx-auto px-6">
                 <div className="text-center mb-24">
                   <div className="text-xs font-bold text-app-accent uppercase tracking-[0.4em] mb-4">The Ecosystem</div>
@@ -860,8 +860,8 @@ export default function App() {
                       <AreaChart data={revenueData}>
                         <defs>
                           <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor="#B08D57" stopOpacity={0.3}/>
-                            <stop offset="95%" stopColor="#B08D57" stopOpacity={0}/>
+                            <stop offset="5%" stopColor="#C41E3A" stopOpacity={0.3}/>
+                            <stop offset="95%" stopColor="#C41E3A" stopOpacity={0}/>
                           </linearGradient>
                         </defs>
                         <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
@@ -870,7 +870,7 @@ export default function App() {
                         <Tooltip 
                           contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }}
                         />
-                        <Area type="monotone" dataKey="revenue" stroke="#B08D57" strokeWidth={3} fillOpacity={1} fill="url(#colorRev)" />
+                        <Area type="monotone" dataKey="revenue" stroke="#C41E3A" strokeWidth={3} fillOpacity={1} fill="url(#colorRev)" />
                       </AreaChart>
                     </ResponsiveContainer>
                   </div>

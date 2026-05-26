@@ -48,7 +48,7 @@ const tourSteps: TourStep[] = [
       'Immersive 1924 Architecture Storytelling',
       'Real-time Unit Availability Integration',
       'Neighborhood Mosaic & Walk Score Data',
-      'Warm Sage and Brass Accent Branding'
+      'High-Contrast Ruby Accent Branding'
     ],
     image: 'https://images.unsplash.com/photo-1558036117-15d82a90b9b1?q=80&w=1200&auto=format&fit=crop',
     accent: 'bg-app-accent'

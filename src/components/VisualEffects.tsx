@@ -26,7 +26,7 @@ export const ShimmerEffect: React.FC<{ children: React.ReactNode; className?: st
 
 export const ShimmerBackground: React.FC = () => {
   return (
-    <div className="fixed inset-0 -z-10 overflow-hidden bg-[#121B16]">
+    <div className="fixed inset-0 -z-10 overflow-hidden bg-[#0F0F1A]">
       <motion.div
         className="absolute -top-[20%] -left-[10%] w-[60%] h-[60%] rounded-full opacity-20 blur-[120px]"
         animate={{

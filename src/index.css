@@ -6,27 +6,23 @@
   --font-serif: "Libre Baskerville", serif;
   --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
   
-  --color-ruby: #5F7F67;
-  --color-ruby-light: #A9BFA4;
-  --color-ruby-dark: #294236;
+  --color-ruby: #C41E3A;
+  --color-ruby-light: #E8617A;
+  --color-ruby-dark: #8B0F23;
   
-  --color-giants-orange: #B08D57;
-  --color-powder-blue: #D8E6DD;
-  --color-neon-orange: #B08D57;
-  
-  --color-app-bg: #F4EFE6;
-  --color-app-text: #1F241F;
-  --color-app-border: rgba(95, 127, 103, 0.16);
-  --color-app-card: #FFFCF5;
-  --color-app-accent: var(--color-neon-orange);
+  --color-app-bg: #F5F3EF;
+  --color-app-text: #18161A;
+  --color-app-border: rgba(196, 30, 58, 0.10);
+  --color-app-card: #ffffff;
+  --color-app-accent: #C41E3A;
 }
 
 @theme dark {
-  --color-app-bg: #121B16;
-  --color-app-text: #F9F7F5;
-  --color-app-border: rgba(200, 166, 106, 0.16);
-  --color-app-card: #1E2A22;
-  --color-app-accent: var(--color-neon-orange);
+  --color-app-bg: #0F0F1A;
+  --color-app-text: #F0EDF4;
+  --color-app-border: rgba(196, 30, 58, 0.18);
+  --color-app-card: #1A1828;
+  --color-app-accent: #C41E3A;
 }
 
 @layer base {
@@ -36,14 +32,14 @@
 
   .dark body {
     background: 
-      radial-gradient(circle at 50% 0%, #243a2b 0%, transparent 50%),
-      radial-gradient(circle at 0% 100%, #1f241f 0%, transparent 40%),
-      #121B16;
+      radial-gradient(circle at 50% 0%, #1f0a10 0%, transparent 55%),
+      radial-gradient(circle at 0% 100%, #0a0a14 0%, transparent 45%),
+      #0F0F1A;
   }
 
   .light body {
     background: 
-      radial-gradient(circle at 100% 0%, #fff8ea 0%, transparent 40%),
-      #F4EFE6;
+      radial-gradient(circle at 100% 0%, #fff0f2 0%, transparent 40%),
+      #F5F3EF;
   }
 }
