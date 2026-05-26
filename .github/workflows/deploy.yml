@@ -50,7 +50,7 @@ jobs:
             echo "::error::See DEPLOYMENT.md → 'Where the secrets live' for the org settings URL and step-by-step fix."
             exit 1
           fi
-          echo "Cloudflare secrets present (token length: ${#CF_TOKEN}, account length: ${#CF_ACCOUNT})."
+          echo "Cloudflare secrets are configured."
 
       # Secrets are managed at the ORG level:
       #   https://github.com/organizations/BelichickGillisMusk/settings/secrets/actions
