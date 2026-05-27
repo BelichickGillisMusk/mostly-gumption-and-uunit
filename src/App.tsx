@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   TrendingUp, 
@@ -65,6 +65,7 @@ import { BuildingIntelligence } from './components/BuildingIntelligence';
 import { ProductTour } from './components/ProductTour';
 import { OwnerPresentation } from './components/OwnerPresentation';
 import { NeighborhoodRadiusMap } from './components/NeighborhoodRadiusMap';
+import { canAccessOwnerAdmin } from './adminAccess';
 
 const revenueData = [
   { month: 'Jan', revenue: 45000, occupancy: 92 },
@@ -86,8 +87,32 @@ export default function App() {
   const [view, setView] = useState<'hub' | 'admin' | 'tenant'>('hub');
   const [adminTab, setAdminTab] = useState<'portfolio' | 'rent-roll' | 'maintenance' | 'marketing' | 'community' | 'ceo' | 'sfplus' | 'marketmax' | 'vendors' | 'concerns'>('portfolio');
   const [rentRollUnlocked, setRentRollUnlocked] = useState(false);
+  const [ownerAdminUnlocked, setOwnerAdminUnlocked] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showOwnerVision, setShowOwnerVision] = useState(false);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  }, [view]);
+
+  const handleOwnerAdminAccess = () => {
+    if (ownerAdminUnlocked) {
+      setView('admin');
+      return;
+    }
+
+    const password = window.prompt('Enter owner/admin password');
+
+    if (canAccessOwnerAdmin(password)) {
+      setOwnerAdminUnlocked(true);
+      setView('admin');
+      return;
+    }
+
+    if (password !== null) {
+      alert('Incorrect owner/admin password.');
+    }
+  };
 
   return (
     <div className={`min-h-screen font-sans selection:bg-app-accent/30 transition-colors duration-700`}>
@@ -148,7 +173,7 @@ export default function App() {
                 Hub
               </button>
               <button 
-                onClick={() => setView('admin')}
+                onClick={handleOwnerAdminAccess}
                 className={`px-3 sm:px-4 py-1.5 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest rounded-full transition-all duration-300 ${
                   view === 'admin' 
                   ? 'bg-app-accent text-white shadow-lg' 
@@ -723,8 +748,17 @@ export default function App() {
                   <div className="text-xs font-black uppercase tracking-widest text-app-text/50">Navigation</div>
                   <ul className="space-y-4 text-sm font-bold">
                     <li><a href="#" className="text-app-text/70 hover:text-app-accent transition-colors">Available Units</a></li>
-                    <li><a href="#" className="text-app-text/70 hover:text-app-accent transition-colors">Tenant Portal</a></li>
+                    <li>
+                      <button onClick={() => setView('tenant')} className="text-app-text/70 hover:text-app-accent transition-colors">
+                        Tenant Portal
+                      </button>
+                    </li>
                     <li><a href="#" className="text-app-text/70 hover:text-app-accent transition-colors">Maintenance Request</a></li>
+                    <li>
+                      <button onClick={handleOwnerAdminAccess} className="text-app-text/70 hover:text-app-accent transition-colors">
+                        Owner/Admin
+                      </button>
+                    </li>
                   </ul>
                 </div>
                 <div className="space-y-6">
@@ -1066,6 +1100,12 @@ export default function App() {
           <div className="text-[10px] font-bold text-app-text/30 uppercase tracking-[0.2em]">
             © 2026 Silverbackai.agency • All Rights Reserved • Software Provider
           </div>
+          <button
+            onClick={handleOwnerAdminAccess}
+            className="text-[10px] font-black uppercase tracking-[0.2em] text-app-text/40 hover:text-app-accent transition-colors border-b border-transparent hover:border-app-accent pb-1"
+          >
+            Owner/Admin
+          </button>
         </div>
       </footer>
     </div>
