@@ -30,7 +30,8 @@ import {
   Activity,
   FileText,
   Mail,
-  Wrench
+  Wrench,
+  Lock
 } from 'lucide-react';
 import { 
   AreaChart, 
@@ -147,16 +148,13 @@ export default function App() {
               >
                 Hub
               </button>
-              <button 
-                onClick={() => setView('admin')}
-                className={`px-3 sm:px-4 py-1.5 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest rounded-full transition-all duration-300 ${
-                  view === 'admin' 
-                  ? 'bg-app-accent text-white shadow-lg' 
-                  : 'text-app-text/60 hover:text-app-text'
-                }`}
-              >
-                Admin
-              </button>
+              {view === 'admin' && (
+                <button 
+                  className="px-3 sm:px-4 py-1.5 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest rounded-full transition-all duration-300 bg-app-accent text-white shadow-lg"
+                >
+                  Admin
+                </button>
+              )}
               <button 
                 onClick={() => setView('tenant')}
                 className={`px-3 sm:px-4 py-1.5 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest rounded-full transition-all duration-300 ${
@@ -1063,6 +1061,21 @@ export default function App() {
             <div className="w-8 h-8 rounded-lg bg-ruby flex items-center justify-center text-white font-black text-xs">SB</div>
             <span className="text-sm font-black text-app-text uppercase tracking-widest">Silverbackai.agency</span>
           </div>
+          <button
+            onClick={() => {
+              const code = window.prompt('Enter owner access code');
+              if (code === '1225') {
+                setView('admin');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              } else if (code !== null) {
+                alert('Invalid access code.');
+              }
+            }}
+            className="flex items-center gap-1.5 text-[10px] font-bold text-app-text/25 uppercase tracking-[0.2em] hover:text-app-accent/60 transition-colors cursor-pointer"
+          >
+            <Lock className="w-3 h-3" />
+            Owner
+          </button>
           <div className="text-[10px] font-bold text-app-text/30 uppercase tracking-[0.2em]">
             © 2026 Silverbackai.agency • All Rights Reserved • Software Provider
           </div>
