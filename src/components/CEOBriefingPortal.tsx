@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { FileText, Scale, TrendingUp, ChevronRight, Plus, Download, Search, Info, Sparkles, Wand2, X, Copy, Check, FileDown, Save, AlertTriangle } from 'lucide-react';
-import { GoogleGenAI } from "@google/genai";
 import ReactMarkdown from 'react-markdown';
 
 interface LegalForm {
@@ -53,10 +52,12 @@ export function CEOBriefingPortal() {
     setGeneratedLease('');
     
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
-      const response = await ai.models.generateContent({
-        model: "gemini-3.1-pro-preview",
-        contents: `Generate a legally compliant residential lease agreement for California (New CA Standards), specifically optimized for Oakland (Zip Code 94609). 
+      const res = await fetch('/api/ai/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: "gemini-3.1-pro-preview",
+          contents: `Generate a legally compliant residential lease agreement for California (New CA Standards), specifically optimized for Oakland (Zip Code 94609). 
         
         Parameters:
         - Property Branding: SAilverback
@@ -77,9 +78,12 @@ export function CEOBriefingPortal() {
         9. PAYMENT PORTAL: Explicitly mention that all payments (Rent, Deposit, Fees) must be made through the "SAilverback Stripe Payment Portal" at pay.silverbackai.agency/ruby-${unitNumber}.
         
         Format the output using Markdown with clear headings, bold text for emphasis, and a professional legal structure. Use "3875 RUBY" as the property name and "SAilverback" as the management branding.`,
+        }),
       });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'AI generation failed');
 
-      setGeneratedLease(response.text || 'Failed to generate lease content.');
+      setGeneratedLease(data.text || 'Failed to generate lease content.');
     } catch (error) {
       console.error('Error generating lease:', error);
       setGeneratedLease('An error occurred while generating the lease. Please check your API configuration.');

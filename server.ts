@@ -4,6 +4,7 @@ import Database from "better-sqlite3";
 import path from "path";
 import { fileURLToPath } from "url";
 import cookieParser from "cookie-parser";
+import "dotenv/config";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -458,8 +459,9 @@ async function startServer() {
   const app = express();
   const PORT = 3000;
 
-  app.use(express.json());
+  app.use(express.json({ limit: '1mb' }));
   app.use(cookieParser());
+  app.set('trust proxy', 1);
 
   // Cookie Check Endpoint
   app.get("/api/cookie-set", (req, res) => {
@@ -765,13 +767,13 @@ async function startServer() {
   });
 
   app.patch("/api/tenant-notices/:id/view", (req, res) => {
-    const ip = req.ip || req.headers['x-forwarded-for'] || 'unknown';
+    const ip = req.ip || 'unknown';
     db.prepare("UPDATE tenant_notices SET status = 'Viewed', viewed_at = ?, viewed_ip = ? WHERE id = ? AND status = 'Sent'").run(new Date().toISOString(), ip, req.params.id);
     res.json({ status: "ok" });
   });
 
   app.patch("/api/tenant-notices/:id/acknowledge", (req, res) => {
-    const ip = req.ip || req.headers['x-forwarded-for'] || 'unknown';
+    const ip = req.ip || 'unknown';
     db.prepare("UPDATE tenant_notices SET status = 'Acknowledged', acknowledged_at = ?, acknowledged_ip = ? WHERE id = ?").run(new Date().toISOString(), ip, req.params.id);
     res.json({ status: "ok" });
   });
@@ -919,6 +921,27 @@ async function startServer() {
       WHERE id = ?
     `).run(status, notes, req.params.id);
     res.json({ status: "ok" });
+  });
+
+  app.post("/api/ai/generate", async (req, res) => {
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) {
+      return res.status(503).json({ error: "AI features are not configured" });
+    }
+    try {
+      const { model, contents, config } = req.body;
+      const { GoogleGenAI } = await import("@google/genai");
+      const ai = new GoogleGenAI({ apiKey });
+      const response = await ai.models.generateContent({
+        model: model || "gemini-3-flash-preview",
+        contents,
+        config,
+      });
+      res.json({ text: response.text });
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "AI generation failed";
+      res.status(500).json({ error: message });
+    }
   });
 
   app.get("/api/me", (req, res) => {
