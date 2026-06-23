@@ -4,6 +4,7 @@ import Database from "better-sqlite3";
 import path from "path";
 import { fileURLToPath } from "url";
 import cookieParser from "cookie-parser";
+import helmet from "helmet";
 import "dotenv/config";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -459,9 +460,42 @@ async function startServer() {
   const app = express();
   const PORT = 3000;
 
+  app.use(helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "'unsafe-inline'"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        imgSrc: ["'self'", "data:", "https:"],
+        connectSrc: ["'self'", "https://firestore.googleapis.com", "https://*.firebaseio.com"],
+        fontSrc: ["'self'", "https://fonts.gstatic.com"],
+      },
+    },
+  }));
   app.use(express.json({ limit: '1mb' }));
   app.use(cookieParser());
   app.set('trust proxy', 1);
+
+  type AuthenticatedRequest = express.Request & { apiUser?: { email: string; role: string; name: string; id: number } };
+  
+  const requireAuth = (req: AuthenticatedRequest, res: express.Response, next: express.NextFunction) => {
+    const apiKey = req.headers['x-api-key'] as string | undefined;
+    const expectedKey = process.env.API_SECRET_KEY;
+    
+    if (!expectedKey) {
+      return next();
+    }
+    
+    if (!apiKey || apiKey !== expectedKey) {
+      return res.status(401).json({ error: "Authentication required" });
+    }
+    
+    const user = db.prepare("SELECT * FROM users WHERE email = ?").get("mezfin@example.com") as { email: string; role: string; name: string; id: number } | undefined;
+    if (user) {
+      req.apiUser = user;
+    }
+    next();
+  };
 
   // Cookie Check Endpoint
   app.get("/api/cookie-set", (req, res) => {
@@ -480,7 +514,7 @@ async function startServer() {
   });
 
   // API Routes
-  app.get("/api/rent-roll", (req, res) => {
+  app.get("/api/rent-roll", requireAuth, (req: AuthenticatedRequest, res) => {
     const rows = db.prepare(`
       SELECT 
         u.id, 
@@ -626,7 +660,7 @@ async function startServer() {
     res.json({ status: "ok" });
   });
 
-  app.patch("/api/rent-roll/:unitId/overdue", (req, res) => {
+  app.patch("/api/rent-roll/:unitId/overdue", requireAuth, (req: AuthenticatedRequest, res) => {
     const { unitId } = req.params;
     
     // 1. Update the latest payment status to 'Late'
@@ -641,7 +675,7 @@ async function startServer() {
     res.json({ status: "ok" });
   });
 
-  app.get("/api/reports/unit/:unitId", (req, res) => {
+  app.get("/api/reports/unit/:unitId", requireAuth, (req: AuthenticatedRequest, res) => {
     const { unitId } = req.params;
     
     const unit = db.prepare(`
@@ -683,7 +717,7 @@ async function startServer() {
     res.json(property);
   });
 
-  app.patch("/api/units/:id", (req, res) => {
+  app.patch("/api/units/:id", requireAuth, (req: AuthenticatedRequest, res) => {
     const { id } = req.params;
     const { status, photos } = req.body;
     db.prepare("UPDATE units SET status = ?, photos = ? WHERE id = ?").run(status, photos, id);
@@ -760,7 +794,7 @@ async function startServer() {
     res.json(notices);
   });
 
-  app.post("/api/tenant-notices", (req, res) => {
+  app.post("/api/tenant-notices", requireAuth, (req: AuthenticatedRequest, res) => {
     const { tenant_id, title, content } = req.body;
     db.prepare("INSERT INTO tenant_notices (tenant_id, title, content, status) VALUES (?, ?, ?, ?)").run(tenant_id, title, content, 'Sent');
     res.json({ status: "ok" });
@@ -795,7 +829,7 @@ async function startServer() {
     res.json(violations);
   });
 
-  app.post("/api/lease-violations", (req, res) => {
+  app.post("/api/lease-violations", requireAuth, (req: AuthenticatedRequest, res) => {
     const { tenant_id, violation_type, description, violation_date, photo_url, gm_notes } = req.body;
     db.prepare("INSERT INTO lease_violations (tenant_id, violation_type, description, violation_date, photo_url, gm_notes) VALUES (?, ?, ?, ?, ?, ?)")
       .run(tenant_id, violation_type, description, violation_date, photo_url, gm_notes);
@@ -813,12 +847,12 @@ async function startServer() {
   });
 
   // SF Plus Endpoints
-  app.get("/api/bank-transactions", (req, res) => {
+  app.get("/api/bank-transactions", requireAuth, (req: AuthenticatedRequest, res) => {
     const transactions = db.prepare("SELECT * FROM bank_transactions ORDER BY transaction_date DESC").all();
     res.json(transactions);
   });
 
-  app.post("/api/bank-transactions/match", (req, res) => {
+  app.post("/api/bank-transactions/match", requireAuth, (req: AuthenticatedRequest, res) => {
     const { transactionId, unitId } = req.body;
     db.prepare("UPDATE bank_transactions SET matched_unit_id = ?, status = 'Matched' WHERE id = ?").run(unitId, transactionId);
     res.json({ status: "ok" });
