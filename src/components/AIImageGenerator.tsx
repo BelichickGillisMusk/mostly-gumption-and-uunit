@@ -1,9 +1,6 @@
 import React, { useState, useRef } from 'react';
-import { GoogleGenAI } from "@google/genai";
 import { motion, AnimatePresence } from 'motion/react';
 import { Sparkles, Image as ImageIcon, Loader2, Wand2, Upload, X } from 'lucide-react';
-
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || "" });
 
 export const AIPropertyVisualizer: React.FC = () => {
   const [prompt, setPrompt] = useState('');
@@ -31,7 +28,7 @@ export const AIPropertyVisualizer: React.FC = () => {
     setError(null);
     
     try {
-      const parts: any[] = [];
+      const parts: Record<string, unknown>[] = [];
       
       if (sourceImage) {
         const base64Data = sourceImage.split(',')[1];
@@ -49,23 +46,26 @@ export const AIPropertyVisualizer: React.FC = () => {
           : `High-end, professional architectural photography of a modern rental property. Style: Luxury, clean, professional. Context: ${prompt}`,
       });
 
-      const response = await ai.models.generateContent({
-        model: 'gemini-3.1-flash-image-preview',
-        contents: { parts },
-        config: {
-          imageConfig: {
-            aspectRatio: "16:9",
-            imageSize: "1K"
+      const res = await fetch('/api/ai/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'gemini-3.1-flash-image-preview',
+          contents: { parts },
+          config: {
+            imageConfig: {
+              aspectRatio: "16:9",
+              imageSize: "1K"
+            },
           },
-        },
+        }),
       });
 
-      for (const part of response.candidates?.[0]?.content?.parts || []) {
-        if (part.inlineData) {
-          const base64EncodeString = part.inlineData.data;
-          setGeneratedImage(`data:image/png;base64,${base64EncodeString}`);
-          break;
-        }
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'AI generation failed');
+      
+      if (data.text) {
+        setGeneratedImage(data.text);
       }
     } catch (err) {
       console.error("Generation error:", err);

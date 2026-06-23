@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
 import { MapPin, Train, Hospital, TreePine, Navigation, Info } from 'lucide-react';
-import { GoogleGenAI } from "@google/genai";
 
 interface LocationInfo {
   name: string;
@@ -16,17 +15,22 @@ export const MarketingModule: React.FC = () => {
 
   const fetchProximityData = async () => {
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
-      const response = await ai.models.generateContent({
-        model: "gemini-3-flash-preview",
-        contents: "List the proximity of 3875 Ruby St, Oakland, CA to BART stations, major hospitals (Kaiser, Sutter, UCSF), parks, Piedmont Ave, Berkeley, SF, and major highways. Return as a JSON array of objects with 'name', 'distance', and 'type' (one of: transit, hospital, park, highway, neighborhood).",
-        config: {
-          tools: [{ googleMaps: {} }],
-          responseMimeType: "application/json"
-        }
+      const res = await fetch('/api/ai/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: "gemini-3-flash-preview",
+          contents: "List the proximity of 3875 Ruby St, Oakland, CA to BART stations, major hospitals (Kaiser, Sutter, UCSF), parks, Piedmont Ave, Berkeley, SF, and major highways. Return as a JSON array of objects with 'name', 'distance', and 'type' (one of: transit, hospital, park, highway, neighborhood).",
+          config: {
+            tools: [{ googleMaps: {} }],
+            responseMimeType: "application/json"
+          }
+        }),
       });
+      const result = await res.json();
+      if (!res.ok) throw new Error(result.error || 'AI generation failed');
 
-      const data = JSON.parse(response.text);
+      const data = JSON.parse(result.text);
       setLocations(data);
     } catch (err) {
       console.error("Error fetching proximity data:", err);
