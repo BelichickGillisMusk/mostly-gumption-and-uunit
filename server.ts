@@ -4,6 +4,8 @@ import Database from "better-sqlite3";
 import path from "path";
 import { fileURLToPath } from "url";
 import cookieParser from "cookie-parser";
+import helmet from "helmet";
+import rateLimit from "express-rate-limit";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -458,8 +460,21 @@ async function startServer() {
   const app = express();
   const PORT = 3000;
 
-  app.use(express.json());
+  app.set("trust proxy", 1);
+
+  app.use(helmet({
+    contentSecurityPolicy: process.env.NODE_ENV === "production" ? undefined : false,
+  }));
+  app.use(express.json({ limit: "100kb" }));
   app.use(cookieParser());
+
+  const writeLimiter = rateLimit({
+    windowMs: 60 * 1000,
+    max: 30,
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: { error: "Too many requests, please try again later." },
+  });
 
   // Cookie Check Endpoint
   app.get("/api/cookie-set", (req, res) => {
@@ -512,7 +527,7 @@ async function startServer() {
     res.json(messages);
   });
 
-  app.post("/api/messages", (req, res) => {
+  app.post("/api/messages", writeLimiter, (req, res) => {
     const { unit_id, sender, content } = req.body;
     db.prepare("INSERT INTO messages (unit_id, sender, content) VALUES (?, ?, ?)").run(unit_id, sender, content);
     
@@ -536,7 +551,7 @@ async function startServer() {
     res.json(concerns);
   });
 
-  app.post("/api/concerns", (req, res) => {
+  app.post("/api/concerns", writeLimiter, (req, res) => {
     const { unit_id, type, message } = req.body;
     db.prepare(`
       INSERT INTO tenant_concerns (unit_id, type, message) 
@@ -549,7 +564,7 @@ async function startServer() {
     res.json({ status: "ok" });
   });
 
-  app.patch("/api/concerns/:id", (req, res) => {
+  app.patch("/api/concerns/:id", writeLimiter, (req, res) => {
     const { id } = req.params;
     const { status, gm_notes } = req.body;
     db.prepare(`
@@ -576,7 +591,7 @@ async function startServer() {
     res.json(requests);
   });
 
-  app.post("/api/maintenance", (req, res) => {
+  app.post("/api/maintenance", writeLimiter, (req, res) => {
     const { unit_id, description, photo_url, assigned_to, gm_notes } = req.body;
     db.prepare(`
       INSERT INTO maintenance_requests (unit_id, description, photo_url, assigned_to, gm_notes, status) 
@@ -589,7 +604,7 @@ async function startServer() {
     res.json({ status: "ok" });
   });
 
-  app.patch("/api/maintenance/:id/status", (req, res) => {
+  app.patch("/api/maintenance/:id/status", writeLimiter, (req, res) => {
     const { id } = req.params;
     const { status, gm_notes, approval_notes, assigned_to, cost, is_emergency, is_escalated } = req.body;
     
@@ -624,7 +639,7 @@ async function startServer() {
     res.json({ status: "ok" });
   });
 
-  app.patch("/api/rent-roll/:unitId/overdue", (req, res) => {
+  app.patch("/api/rent-roll/:unitId/overdue", writeLimiter, (req, res) => {
     const { unitId } = req.params;
     
     // 1. Update the latest payment status to 'Late'
@@ -681,7 +696,7 @@ async function startServer() {
     res.json(property);
   });
 
-  app.patch("/api/units/:id", (req, res) => {
+  app.patch("/api/units/:id", writeLimiter, (req, res) => {
     const { id } = req.params;
     const { status, photos } = req.body;
     db.prepare("UPDATE units SET status = ?, photos = ? WHERE id = ?").run(status, photos, id);
@@ -698,7 +713,7 @@ async function startServer() {
     res.json(referrals);
   });
 
-  app.post("/api/referrals", (req, res) => {
+  app.post("/api/referrals", writeLimiter, (req, res) => {
     const { tenant_id, friend_name, friend_email } = req.body;
     db.prepare("INSERT INTO referrals (tenant_id, friend_name, friend_email) VALUES (?, ?, ?)").run(tenant_id, friend_name, friend_email);
     res.json({ status: "ok" });
@@ -723,7 +738,7 @@ async function startServer() {
     res.json(settings);
   });
 
-  app.patch("/api/user-settings/:userId", (req, res) => {
+  app.patch("/api/user-settings/:userId", writeLimiter, (req, res) => {
     const { preferred_notification_time, sms_enabled, email_enabled } = req.body;
     db.prepare(`
       UPDATE user_settings 
@@ -758,20 +773,20 @@ async function startServer() {
     res.json(notices);
   });
 
-  app.post("/api/tenant-notices", (req, res) => {
+  app.post("/api/tenant-notices", writeLimiter, (req, res) => {
     const { tenant_id, title, content } = req.body;
     db.prepare("INSERT INTO tenant_notices (tenant_id, title, content, status) VALUES (?, ?, ?, ?)").run(tenant_id, title, content, 'Sent');
     res.json({ status: "ok" });
   });
 
-  app.patch("/api/tenant-notices/:id/view", (req, res) => {
-    const ip = req.ip || req.headers['x-forwarded-for'] || 'unknown';
+  app.patch("/api/tenant-notices/:id/view", writeLimiter, (req, res) => {
+    const ip = req.ip || 'unknown';
     db.prepare("UPDATE tenant_notices SET status = 'Viewed', viewed_at = ?, viewed_ip = ? WHERE id = ? AND status = 'Sent'").run(new Date().toISOString(), ip, req.params.id);
     res.json({ status: "ok" });
   });
 
-  app.patch("/api/tenant-notices/:id/acknowledge", (req, res) => {
-    const ip = req.ip || req.headers['x-forwarded-for'] || 'unknown';
+  app.patch("/api/tenant-notices/:id/acknowledge", writeLimiter, (req, res) => {
+    const ip = req.ip || 'unknown';
     db.prepare("UPDATE tenant_notices SET status = 'Acknowledged', acknowledged_at = ?, acknowledged_ip = ? WHERE id = ?").run(new Date().toISOString(), ip, req.params.id);
     res.json({ status: "ok" });
   });
@@ -793,7 +808,7 @@ async function startServer() {
     res.json(violations);
   });
 
-  app.post("/api/lease-violations", (req, res) => {
+  app.post("/api/lease-violations", writeLimiter, (req, res) => {
     const { tenant_id, violation_type, description, violation_date, photo_url, gm_notes } = req.body;
     db.prepare("INSERT INTO lease_violations (tenant_id, violation_type, description, violation_date, photo_url, gm_notes) VALUES (?, ?, ?, ?, ?, ?)")
       .run(tenant_id, violation_type, description, violation_date, photo_url, gm_notes);
@@ -816,7 +831,7 @@ async function startServer() {
     res.json(transactions);
   });
 
-  app.post("/api/bank-transactions/match", (req, res) => {
+  app.post("/api/bank-transactions/match", writeLimiter, (req, res) => {
     const { transactionId, unitId } = req.body;
     db.prepare("UPDATE bank_transactions SET matched_unit_id = ?, status = 'Matched' WHERE id = ?").run(unitId, transactionId);
     res.json({ status: "ok" });
@@ -858,7 +873,7 @@ async function startServer() {
     res.json(updates);
   });
 
-  app.post("/api/lease-updates", (req, res) => {
+  app.post("/api/lease-updates", writeLimiter, (req, res) => {
     const { tenant_id, year, status, walkthrough_completed, signed_at } = req.body;
     const existing = db.prepare("SELECT id FROM lease_updates WHERE tenant_id = ? AND year = ?").get(tenant_id, year);
     
@@ -900,7 +915,7 @@ async function startServer() {
     res.json(cameras);
   });
 
-  app.post("/api/security-cameras", (req, res) => {
+  app.post("/api/security-cameras", writeLimiter, (req, res) => {
     const { property_id, location, model, installation_date, status, notes } = req.body;
     const result = db.prepare(`
       INSERT INTO security_cameras (property_id, location, model, installation_date, status, notes)
@@ -909,7 +924,7 @@ async function startServer() {
     res.json({ id: result.lastInsertRowid });
   });
 
-  app.patch("/api/security-cameras/:id", (req, res) => {
+  app.patch("/api/security-cameras/:id", writeLimiter, (req, res) => {
     const { status, notes } = req.body;
     db.prepare(`
       UPDATE security_cameras 
