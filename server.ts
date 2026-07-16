@@ -458,8 +458,18 @@ async function startServer() {
   const app = express();
   const PORT = 3000;
 
+  app.set('trust proxy', true);
   app.use(express.json());
   app.use(cookieParser());
+
+  app.use((req, res, next) => {
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('X-Frame-Options', 'DENY');
+    res.setHeader('X-XSS-Protection', '0');
+    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+    res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+    next();
+  });
 
   // Cookie Check Endpoint
   app.get("/api/cookie-set", (req, res) => {
@@ -765,13 +775,13 @@ async function startServer() {
   });
 
   app.patch("/api/tenant-notices/:id/view", (req, res) => {
-    const ip = req.ip || req.headers['x-forwarded-for'] || 'unknown';
+    const ip = req.ip || 'unknown';
     db.prepare("UPDATE tenant_notices SET status = 'Viewed', viewed_at = ?, viewed_ip = ? WHERE id = ? AND status = 'Sent'").run(new Date().toISOString(), ip, req.params.id);
     res.json({ status: "ok" });
   });
 
   app.patch("/api/tenant-notices/:id/acknowledge", (req, res) => {
-    const ip = req.ip || req.headers['x-forwarded-for'] || 'unknown';
+    const ip = req.ip || 'unknown';
     db.prepare("UPDATE tenant_notices SET status = 'Acknowledged', acknowledged_at = ?, acknowledged_ip = ? WHERE id = ?").run(new Date().toISOString(), ip, req.params.id);
     res.json({ status: "ok" });
   });
