@@ -28,7 +28,7 @@ This document is the canonical reference for how `RENT-DMC` deploys to Cloudflar
 
 ## Known issues / cleanup
 
-- **`CLOUDFARE_TOKEN`** (missing the "L" in CLOUDFLARE) exists as an org secret and should be **deleted** — it is a typo and is unused by any workflow. Leaving it around causes confusion.
+- **`CLOUDFARE_TOKEN`** (missing the "L" in CLOUDFLARE) — if you see this secret in the org or repo secrets list, it is a typo and should be **deleted**. It is unused by any workflow; leaving it around causes confusion.
 
 ---
 

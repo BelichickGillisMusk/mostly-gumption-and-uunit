@@ -10,8 +10,8 @@
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit",
     "deploy": "npm run build && wrangler pages deploy dist --project-name rent-ruby",
-    "deploy:cloudflare": "npm run build && npx wrangler deploy",
-    "deploy:cloudflare:dry-run": "npm run build && npx wrangler deploy --dry-run"
+    "deploy:cloudflare": "npm run build && wrangler deploy",
+    "deploy:cloudflare:dry-run": "npm run build && wrangler deploy --dry-run"
   },
   "dependencies": {
     "@google/genai": "^1.29.0",

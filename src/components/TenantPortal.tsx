@@ -433,7 +433,7 @@ export const TenantPortal = () => {
                             backgroundColor: (privacyMode && !isCurrentUser) ? '#1A1A1A' : custom.color,
                             borderColor: isCurrentUser ? '#C41E3A' : 'rgba(255,255,255,0.1)'
                           }}
-                          className={`w-20 h-24 rounded-t-2xl rounded-b-lg border-2 flex flex-col items-center justify-center transition-all hover:scale-110 hover:shadow-[0_0_40px_rgba(166,75,75,0.4)] group relative shadow-2xl ${isCurrentUser ? 'ring-4 ring-ruby/30' : ''}`}
+                          className={`w-20 h-24 rounded-t-2xl rounded-b-lg border-2 flex flex-col items-center justify-center transition-all hover:scale-110 hover:shadow-[0_0_40px_rgba(196,30,58,0.4)] group relative shadow-2xl ${isCurrentUser ? 'ring-4 ring-ruby/30' : ''}`}
                         >
                           {(privacyMode && !isCurrentUser) && (
                             <div className="absolute inset-0 z-10 bg-black/40 backdrop-blur-[2px] rounded-t-2xl rounded-b-lg flex items-center justify-center">

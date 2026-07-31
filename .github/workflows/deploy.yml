@@ -20,7 +20,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'npm'
 
       - name: Install dependencies
@@ -29,7 +29,7 @@ jobs:
       - name: Build
         run: npm run build
         env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_API_KEY: ${{ github.event_name == 'push' && secrets.GEMINI_API_KEY || '' }}
 
       - name: Verify Cloudflare secrets are configured
         if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
@@ -64,4 +64,4 @@ jobs:
           projectName: rent-ruby
           directory: dist
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref_name }}
+          branch: ${{ github.event_name == 'pull_request' && github.head_ref || github.ref_name }}
